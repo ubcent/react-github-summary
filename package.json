@@ -1,0 +1,24 @@
+{
+  "name": "react-ghub-summary",
+  "version": "1.0.0",
+  "description": "A bunch of react components for visualizing GitHub profiles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ubcent/react-github-summary.git"
+  },
+  "keywords": [
+    "react",
+    "github",
+    "charts"
+  ],
+  "author": "Dmitry Bondarchuk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ubcent/react-github-summary/issues"
+  },
+  "homepage": "https://github.com/ubcent/react-github-summary#readme"
+}
