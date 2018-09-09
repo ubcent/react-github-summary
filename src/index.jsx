@@ -1,16 +1,8 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import './index.css';
 
-class GithubSummary extends PureComponent {
-  render() {
-    return (
-      <div/>
-    )
-  }
-}
+import React from 'react';
+import ReactDom from 'react-dom';
 
-GithubSummary.propTypes = {
-  username: PropTypes.string.isRequired
-};
+import App from './App';
 
-export default GithubSummary;
+ReactDom.render(<App />, document.getElementById('summary'));
