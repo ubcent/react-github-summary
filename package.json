@@ -7,9 +7,9 @@
         "dev": "webpack-dev-server --mode development --config webpack.config.js --progress",
         "build": "rimraf dist && webpack --mode production --config webpack.config.prod.js --progress",
         "cli": "node cli/component.js --name",
-        "test:css": "stylelint [./src/**/*.css, ./src/**/**/*.css]",
+        "test:css": "stylelint ./src/*.css, ./src/**/*.css, ./src/**/**/*.css",
         "test:js": "eslint ./src/ --ext .js,.jsx",
-        "lint": "npm run lint-css && npm run lint-js",
+        "lint": "npm run test:css && npm run test:js",
         "jest": "jest",
         "test": "npm run test:css && npm run test:js && npm run jest"
     },

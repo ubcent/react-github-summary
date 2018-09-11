@@ -1,12 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 
-import Form from 'components/Form';
+import FormContainers from 'containers/FormContainers';
 
 class App extends PureComponent {
     render() {
         return (
             <Fragment>
-                <Form />
+                <FormContainers />
             </Fragment>
         );
     }

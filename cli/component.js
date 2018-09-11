@@ -48,7 +48,7 @@ fs.writeFileSync(
   `import React from 'react';
 import { shallow } from 'enzyme';
 
-import Form from 'components/Form';
+import ${name} from 'components/${name}';
 
 test('TODO', () => {});
 `,
