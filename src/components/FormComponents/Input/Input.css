@@ -1,0 +1,58 @@
+.summary-form {
+    position: relative;
+    display: block;
+    width: 90%;
+}
+
+.textinput__input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    border: 0 solid transparent;
+    margin: 0;
+    background: 0 0;
+    color: var(--color-content-form);
+    font-family: var(--font);
+    font-size: 100%;
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    vertical-align: top;
+}
+
+.textinput__input:-webkit-autofill,
+.input__control:-webkit-autofill:hover,
+.input__control:-webkit-autofill:focus,
+.input__control:-webkit-autofill:active {
+    -webkit-text-fill-color: rgba(255, 255, 255, 1) !important;
+    transition: background-color 999999s ease-in-out 0s;
+}
+
+.textinput__box {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    color: var(--color-content-form);
+}
+
+.textinput__box::after {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: red;
+    content: '';
+    transition: width 0.3s ease-in-out;
+}
+
+.active::after {
+    background: rgba(25, 187, 79, 1);
+}
