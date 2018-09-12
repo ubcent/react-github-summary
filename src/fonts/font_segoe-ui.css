@@ -1,0 +1,45 @@
+/**
+     * За основной шрифт был выбран Segoe UI.
+     */
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/font_segoe-ui_light.woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/font_segoe-ui_regular.woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/font_segoe-ui_medium.woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/font_segoe-ui_bold.woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: italic;
+    font-weight: 400;
+    src: url('../fonts/font_segoe-ui_italic.woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: italic;
+    font-weight: 700;
+    src: url('../fonts/font_segoe-ui_bold-italic.woff');
+}

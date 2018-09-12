@@ -1,80 +1,138 @@
-const webpack = require('webpack');
+const PATH_OUTPUT = require('path').join(__dirname, 'dist');
+const PATH_ENTRY = require('path').join(__dirname, 'src/index.jsx');
 const path = require('path');
-const pak = require('./package.json');
-const nodeEnv = process.env.NODE_ENV || 'development';
-const demoDir = 'docs';
 
-const webpackConfig = {
-  context: __dirname,
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+
+const QUERY = {
+  name: '[name].[hash].[ext]',
+};
+
+module.exports = {
   entry: {
-    'react-ghub-summary': [
-      path.resolve(__dirname, 'src', 'index.jsx')
-    ]
+    main: PATH_ENTRY,
   },
   output: {
-    path: path.resolve(__dirname),
-    filename: 'index.js',
-    library: 'CircularColor',
-    libraryTarget: 'umd'
+    path: PATH_OUTPUT,
+    filename: 'bundle.[chunkhash].js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    modules: ['node_modules']
+    alias: {
+      components: path.resolve(__dirname, 'src/components'),
+      containers: path.resolve(__dirname, 'src/containers'),
+      reducers: path.resolve(__dirname, 'src/reducers'),
+      actions: path.resolve(__dirname, 'src/actions'),
+    },
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader'
-      }
-    ]
+        loader: require.resolve('babel-loader'),
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                module: true
+              },
+            },
+            'postcss-loader',
+          ],
+        }),
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: require.resolve('file-loader'),
+        options: Object.assign({ mimetype: 'application/font-woff' }, QUERY),
+      },
+      {
+        test: /\.(ttf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: require.resolve('file-loader'),
+        options: Object.assign({ mimetype: 'application/octet-stream' }, QUERY),
+      },
+      {
+        test: /\.(eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: require.resolve('file-loader'),
+      },
+      {
+        test: /\.(jpe?g)$/i,
+        loader: require.resolve('file-loader'),
+        options: Object.assign({ mimetype: 'image/jpeg' }, QUERY),
+      },
+      {
+        test: /\.(gif)$/i,
+        loader: require.resolve('file-loader'),
+        options: Object.assign({ mimetype: 'image/gif' }, QUERY),
+      },
+      {
+        test: /\.(png)$/i,
+        loader: require.resolve('file-loader'),
+        options: Object.assign({ mimetype: 'image/png' }, QUERY),
+      },
+      {
+        test: /\.(svg)$/i,
+        loader: require.resolve('file-loader'),
+        options: Object.assign({ mimetype: 'image/svg+xml' }, QUERY),
+      },
+    ],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(nodeEnv)
+    new StyleLintPlugin({
+      configFile: './stylelint.config.js',
+      files: ['./src/*.css', './src/**/*.css', './src/**/**/*.css'],
     }),
-    new webpack.LoaderOptionsPlugin({
-      debug: true
-    })
-  ]
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'src/index.html'),
+      filename: 'index.html',
+    }),
+    new ExtractTextPlugin({
+      filename: 'index.[hash].css',
+    }),
+    new UglifyJsPlugin({
+      cache: true,
+      parallel: 4,
+      uglifyOptions: {
+        ecma: 8,
+        warnings: false,
+        parse: {},
+        compress: {
+          sequences: true,
+          booleans: true,
+          loops: true,
+          unused: true,
+          warnings: false,
+          drop_console: true,
+          unsafe: true,
+        },
+        mangle: true,
+        output: {
+          comments: false,
+          beautify: false,
+        },
+        toplevel: false,
+        nameCache: null,
+        ie8: false,
+        keep_classnames: undefined,
+        keep_fnames: false,
+        safari10: false,
+      },
+    }),
+  ],
+  devServer: {
+    contentBase: PATH_OUTPUT,
+    port: 8000,
+    historyApiFallback: true,
+  },
 };
-
-if (nodeEnv === 'development') {
-  webpackConfig.devtool = 'source-map';
-  webpackConfig.devServer = { contentBase: path.resolve(__dirname, demoDir) };
-  webpackConfig.entry['react-ghub-summary'].unshift('webpack-dev-server/client?http://0.0.0.0:8080/');
-  webpackConfig.entry['react-ghub-summary'].push(path.resolve(__dirname, demoDir, 'demo.jsx'));
-  webpackConfig.output.publicPath = '/';
-}
-
-if (nodeEnv === 'demo') {
-  webpackConfig.entry['react-ghub-summary'].push(path.resolve(__dirname, demoDir, 'demo.jsx'));
-  webpackConfig.output.path = path.resolve(__dirname, demoDir);
-}
-
-if (nodeEnv === 'development' || nodeEnv === 'demo') {
-  webpackConfig.plugins.push(new webpack.DefinePlugin({
-    'COMPONENT_NAME': JSON.stringify(pak.name),
-    'COMPONENT_VERSION': JSON.stringify(pak.version),
-    'COMPONENT_DESCRIPTION': JSON.stringify(pak.description)
-  }));
-}
-
-if (nodeEnv === 'production') {
-  webpackConfig.externals = {
-    'react': {
-      root: 'React',
-      commonjs2: 'react',
-      commonjs: 'react',
-      amd: 'react'
-    }
-  };
-  webpackConfig.output.path = path.resolve(__dirname, 'build');
-  webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
-    compress: { warnings: false },
-    sourceMap: false
-  }));
-}
-
-module.exports = webpackConfig;
